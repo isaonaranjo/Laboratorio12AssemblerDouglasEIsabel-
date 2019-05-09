@@ -1,263 +1,248 @@
 ﻿@ Maria Isabel Ortiz Naranjo
+ @ Douglas de Leon 
+ @ carnet: 18037
 @ Carnet: 18176
 @ 6/05/2019
 
- .text
- .align 2|
- .global main
+.text
+.align 2
+.global main
 
 main:
-	@utilizando la biblioteca GPIO (gpio0_2.s)
-	bl GetGpioAddress @solo se llama una vez
-	
-	@GPIO para escritura (salida) puerto 16
-	mov r0,#16
-	mov r1,#1
+	bl GetGpioAddress
+
+	mov r0, #16
+	mov r1, #1
 	bl SetGpioFunction
 
-    @GPIO para escritura (salida) puerto 17
-	mov r0,#17
-	mov r1,#1
+	mov r0, #17
+	mov r1, #1
 	bl SetGpioFunction
 
-    @GPIO para escritura (salida) puerto 22
-	mov r0,#22
-	mov r1,#1
+	mov r0, #22
+	mov r1, #1
 	bl SetGpioFunction
 
-    @@ Todos los leds apagados
-    @Apagar GPIO 16
-	mov r0,#16
-	mov r1,#0
+	mov r0, #16
+	mov r1, #0
 	bl SetGpio
 
-    @Apagar GPIO 17
-	mov r0,#17
-	mov r1,#0
+	mov r0, #17
+	mov r1, #0
 	bl SetGpio
 
-    @Apagar GPIO 22
-	mov r0,#22
-	mov r1,#0
+	mov r0, #22
+	mov r1, #0
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds apagados
+
+	bl wait
+
 ingreso:
-    ldr r0, =mensajeIngreso 
-    bl puts
-    /*El numero ingresado*/
-	ldr r0,=formato
-	ldr r1,=numero 
+	ldr r0, =mensajeIngreso
+	bl puts
+
+	ldr r0, =formato
+	ldr r1, =numero
 	bl scanf
-	/*carga el numero en r1*/
-	ldr r1,=numero
-	ldr r1,[r1]
-	/*compara si esta en el rango */
-	cmp r1,#0
-	cmpge r1,#7
-	ldrgt r0,=mensaje1
+
+	ldr r1, =numero
+	ldr r1, [r1]
+
+	cmp r1, #0
+	cmpge r1, #7
+	ldrgt r0, =mensaje1
 	blgt puts
 	blle encenderLeds
-    b final 
 
+	b final
 
-final: 
-    /* salida correcta */
+final:
 	mov r0, #0
 	mov r3, #0
-	ldmfd sp!, {lr}	/* R13 = SP */
+	ldmfd sp!, {lr}
 	bx lr
 
-@@ Subrutina encender leds
 encenderLeds:
-    push {lr}
-    ldr r1, =numero
-    ldrb r1, [r1]
-    // Comparar con 0
-    cmp r1, #0
-    beq cero
-    // Comparar con 1
-    cmp r1, #1
-    beq uno
-    // Comparar con 2
-    cmp r1, #2
-    beq dos
-    // Comparar con 3
-    cmp r1, #3
-    beq tres
-    // Comparar con 4
-    cmp r1, #4
-    beq cuatro 
-    // Comparar con 5
-    cmp r1, #5
-    beq cinco 
-    // Comparar con 6
-    cmp r1, #6
-    beq seis
-    // Comparar con 7
-    cmp r1, #7
-    beq siete 
+	push {lr}
+	ldr r1, =numero
+	ldrb r1, [r1]
+
+	cmp r1, #0
+	beq cero
+
+	cmp r1, #1
+	beq uno
+
+	cmp r1, #2
+	beq dos
+
+	cmp r1, #3
+	beq tres
+
+	cmp r1, #4
+	beq cuatro
+
+	cmp r1, #5
+	beq cinco
+
+	cmp r1, #6
+	beq seis
+
+	cmp r1, #7
+	beq siete
+
 cero:
-    @@ Todos los leds apagados
-    @Apagar GPIO 16
-	mov r0,#16
-	mov r1,#0
+	mov r0, #16
+	mov r1, #0
 	bl SetGpio
 
-    @Apagar GPIO 17
-	mov r0,#17
-	mov r1,#0
+	mov r0, #17
+	mov r1, #0
 	bl SetGpio
 
-    @Apagar GPIO 22
-	mov r0,#22
-	mov r1,#0
+	mov r0, #22
+	mov r1, #0
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds apagados
-    b fin 
+
+	bl wait
+	b fin
+
 uno:
-    @@ Se enciende el puerto 22
-    @Apagar GPIO 16
-	mov r0,#16
-	mov r1,#0
+	mov r0, #16
+	mov r1, #0
 	bl SetGpio
 
-    @Apagar GPIO 17
-	mov r0,#17
-	mov r1,#0
+	mov r0, #17
+	mov r1, #0
 	bl SetGpio
 
-    @Encender GPIO 22
-	mov r0,#22
-	mov r1,#1
+	mov r0, #22
+	mov r1, #1
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds
-    b fin 
+
+	bl wait
+	b fin
+
 dos:
-    @Apagar GPIO 16
-	mov r0,#16
-	mov r1,#0
+	mov r0, #16
+	mov r1, #0
 	bl SetGpio
 
-    @Encender GPIO 17
-	mov r0,#17
-	mov r1,#1
+	mov r0, #17
+	mov r1, #1
 	bl SetGpio
 
-    @Apagar GPIO 22
-	mov r0,#22
-	mov r1,#0
+	mov r0, #22
+	mov r1, #0
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds 
-    b fin 
+
+	bl wait
+	b fin
+
 tres:
-    @Apagar GPIO 16
-	mov r0,#16
-	mov r1,#0
+	mov r0, #16
+	mov r1, #0
 	bl SetGpio
 
-    @Encender GPIO 17
-	mov r0,#17
-	mov r1,#1
+	mov r0, #17
+	mov r1, #1
 	bl SetGpio
 
-    @Apagar GPIO 22
-	mov r0,#22
-	mov r1,#0
+	mov r0, #22
+	mov r1, #1
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds apagados
-    b fin 
+
+	bl wait
+	b fin
+
 cuatro:
-    @Apagar GPIO 16
-	mov r0,#16
-	mov r1,#0
+	mov r0, #16
+	mov r1, #1
 	bl SetGpio
 
-    @Apagar GPIO 17
-	mov r0,#17
-	mov r1,#0
+	mov r0, #17
+	mov r1, #0
 	bl SetGpio
 
-    @Encender GPIO 22
-	mov r0,#22
-	mov r1,#1
+	mov r0, #22
+	mov r1, #0
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds apagados
-    b fin 
+
+	bl wait
+	b fin
+
 cinco:
-    @Encender GPIO 16
-	mov r0,#16
-	mov r1,#1
+	mov r0, #16
+	mov r1, #1
 	bl SetGpio
 
-    @Apagar GPIO 17
-	mov r0,#17
-	mov r1,#0
+	mov r0, #17
+	mov r1, #0
 	bl SetGpio
 
-    @Encender GPIO 22
-	mov r0,#22
-	mov r1,#1
+	mov r0, #22
+	mov r1, #1
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds 
-    b fin 
+
+	bl wait
+	b fin
+
 seis:
-    @Encender GPIO 16
-	mov r0,#16
-	mov r1,#1
+	mov r0, #16
+	mov r1, #1
 	bl SetGpio
 
-    @Encender GPIO 17
-	mov r0,#17
-	mov r1,#1
+	mov r0, #17
+	mov r1, #1
 	bl SetGpio
 
-    @Apagar GPIO 22
-	mov r0,#22
-	mov r1,#0
+	mov r0, #22
+	mov r1, #0
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds 
-    b fin 
+
+	bl wait
+	b fin
+
 siete:
-    @Encender GPIO 16
-	mov r0,#16
-	mov r1,#1
+	mov r0, #16
+	mov r1, #1
 	bl SetGpio
 
-    @Encender GPIO 17
-	mov r0,#17
-	mov r1,#1
+	mov r0, #17
+	mov r1, #1
 	bl SetGpio
 
-    @Encender GPIO 22
-	mov r0,#22
-	mov r1,#1
+	mov r0, #22
+	mov r1, #1
 	bl SetGpio
-    bl wait @ llamar a wait para que se aprecien los leds 
-    b fin 
- fin:   
-    pop {pc}
 
+	bl wait
+	b fin
 
+fin:
+	pop {pc}
 
-
-@ brief pause routine
 wait:
- mov r0, #0x4000000 @ big number
-sleepLoop:
- subs r0,#1
- bne sleepLoop @ loop delay
- mov pc,lr
+	mov r0, #0x4000000
 
- .data
- .align 2
+sleepLoop:
+	subs r0, #1
+	bne sleepLoop
+	mov pc, lr
+
+.data
+.align 2
 .global myloc
 myloc: .word 0
 mensajeIngreso:
-          .asciz "Ingrese un numero entero entre 0 y 7: "
+	.asciz	"Ingrese un numero entre 0 y 7"
+
 numero:
-          .word 0
+	.word 0
+
 formato:
 	.asciz "%d"
+
 mensaje1:
-    .asciz "El numero no esta en el rango"
- .end
+	.asciz "El numero no esta en el rango"
+	.end
